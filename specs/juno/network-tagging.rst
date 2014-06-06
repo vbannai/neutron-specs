@@ -81,9 +81,18 @@ The implementation is planned along the lines of provider
 extensions. The proposal extends the network resources by using
 extended attributes to associate tags with the resources.
 
-A typical workflow for spinning up a VM might look as follows: 
+A typical workflow (for illustrative purposes) for spinning up a VM
+might look as follows::
+  
+  nova boot --flavor=1 --image <image-name> --nic hints={"Mode":
+  "Bridge", "key": "value", "key": "value" ..}
+  (the made up nova command above is shown for illustrative purposes)
 
-
+  nova would select the hypervisor based on its filtering rules. After
+  the hypervisor is selected, the nova would query the neutron server
+  with the hints along with additional hints that nova wants to
+  pass to neutron. The hints dicitionary might look like
+  hints= nova-hints + {"Mode":"Bridge", "key": "value", "key": "value" }
 
 The reference implementation for this feature will be done using ML2
 with Openvswitch driver.
@@ -92,9 +101,42 @@ with Openvswitch driver.
 Alternatives 
 ------------
 
+Alternatives do not exist for these problems. Some solutions have
+required the nova compute service to deduce the network id of the VM
+either by running a script, looking at configuration data on the
+underlying hypervisor.
 
 Data model impact
 -----------------
+
+The proposal introduces two optional tables. These tables are not
+created if network tagging feature is not used. 
+
+1. Network tag table model.
+
+   The network tag table stores the key value associations
+::
+    +----------------+--------------+------+-----+---------+
+    |     Field      |    Type      | Null | Key | Default |
+    +----------------+--------------+------+-----+---------+
+    | id             | string(36)   | NO   | PRI |         |
+    | name           | string(256)  | NO   |     |         |
+    | value          | string(256)  | NO   |     |         |
+    +----------------+--------------+------+-----+---------+
+
+2. Network resource tag mapping model.
+
+   The network resource tag mapping model stores the tag id associated
+   with the network resource.
+::
+    +----------------+--------------+------+-----+---------+
+    |     Field      |    Type      | Null | Key | Default |
+    +----------------+--------------+------+-----+---------+
+    | id             | string(36)   | NO   | PRI |         |
+    | resource_id    | string(36)   | NO   |     |         |
+    | resource_type  | string(256)  | NO   |     |         |
+    | tag_id         | string(36)   | NO   |     |         |
+    +----------------+--------------+------+-----+---------+
 
 
 REST API impact
@@ -139,6 +181,10 @@ Work Items
 Dependencies
 ============
 
+Once this feature is in place, additional work needs to be done
+through a blueprint to extend passsing of network hints from nova to
+neutron during port creation and network selection.  
+
 
 Testing
 =======
@@ -147,8 +193,11 @@ Testing
 Documentation Impact
 ====================
 
+The documentation has to be upated to show how this feature can be
+used along with sample workflows. 
 
 References
 ==========
 
+* https://blueprints.launchpad.net/neutron/+spec/network-tagging
 
