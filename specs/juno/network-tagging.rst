@@ -113,9 +113,10 @@ The proposal introduces two optional tables. These tables are not
 created if network tagging feature is not used. 
 
 1. Network tag table model.
-
    The network tag table stores the key value associations
+
 ::
+
     +----------------+--------------+------+-----+---------+
     |     Field      |    Type      | Null | Key | Default |
     +----------------+--------------+------+-----+---------+
@@ -125,10 +126,11 @@ created if network tagging feature is not used.
     +----------------+--------------+------+-----+---------+
 
 2. Network resource tag mapping model.
-
    The network resource tag mapping model stores the tag id associated
    with the network resource.
+
 ::
+
     +----------------+--------------+------+-----+---------+
     |     Field      |    Type      | Null | Key | Default |
     +----------------+--------------+------+-----+---------+
