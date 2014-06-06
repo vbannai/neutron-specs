@@ -144,6 +144,86 @@ created if network tagging feature is not used.
 REST API impact
 ---------------
 
+tag-create creates a key, value tag for marking network
+resources. ::
+
+    neutron tag-create --key <key> --value <value>
+
+Only admins can create the tags.
+
+JSON request::
+
+    POST /v2.0/tags
+    Accept: application/json
+    {
+    "tag": {
+	   "key": "sample_tag",
+	   "value": “sample_value”
+    	   }
+    }
+
+JSON response:
+Normal Response Codes : 201
+Error Response Codes : badRequest (400), unauthorized (401)::
+
+    {
+    "tag":{
+	  "id":"850d3f2c-f0a5-4f8b-b1cf-5836fc0be940",
+	  "key":"sample_tag",
+	  "value":"sample_value",
+       	  }
+    }
+
+tag-delete deletes a key, value tag. 
+resources. ::
+
+    neutron tag-delete {tag-id}
+
+Only admins can delete the tags.
+
+JSON request::
+
+    DELETE /v2.0/tags/{tag-uuid}
+    Accept: application/json
+
+JSON response:
+Normal Response Codes : 201
+Error Response Codes : badRequest (400), unauthorized (401)::
+
+tag-list shows all the key, value pairs or the attributes of key, value.
+resources. ::
+
+    neutron tag-list
+
+JSON request::
+
+    GET /v2.0/tags
+    Accept: application/json
+
+JSON response:
+Normal Response Codes : 201
+Error Response Codes : badRequest (400), unauthorized (401)::
+
+    {
+    "tag":{
+	  "id":"850d3f2c-f0a5-4f8b-b1cf-5836fc0be940",
+	  "key":"sample_tag",
+	  "value":"sample_value",
+       	  }, 
+    "tag":{
+	  "id":"850d3f2c-f0a5-4f8b-b1cf-5836fc0be940",
+	  "key":"sample_tag",
+	  "value":"sample_value",
+       	  }, 
+    "tag":{
+	  "id":"850d3f2c-f0a5-4f8b-b1cf-5836fc0be940",
+	  "key":"sample_tag",
+	  "value":"sample_value",
+       	  }, 
+    }
+
+
+ 
 
 Security impact
 ---------------
